@@ -1,13 +1,42 @@
-import Container from './components/Container/Container'
 import ProductsList from './components/ProductsList/ProductsList'
-import data from './data.json'
+import Header from './components/Header/Header'
+import Counter from './components/Counter/Counter'
+import Modal from './components/Modal/Modal'
+import { Component } from 'react'
 
-const App = () => {
-	return (
-		<Container>
-			<ProductsList products={data} />
-		</Container>
-	)
+class App extends Component {
+	state = {
+		isShowModal: false,
+	}
+	toggleModal = () => {
+		this.setState((prev) => ({ isShowModal: !prev.isShowModal }))
+	}
+	render() {
+		console.log('this.state :>> ', this.state)
+		return (
+			<div className='container'>
+				<Header open={this.toggleModal} />
+				{/* <Counter /> */}
+				<ProductsList />
+				{this.state.isShowModal && (
+					<Modal close={this.toggleModal}>MODAL</Modal>
+				)}
+			</div>
+		)
+	}
 }
+
+// if (showModal){
+// 	return Modal()
+// }
+// const App = () => {
+// 	return (
+// 		<div className='container'>
+// 			<Header />
+// 			<Counter />
+// 			<Modal>MODAL</Modal>
+// 		</div>
+// 	)
+// }
 
 export default App
