@@ -1,7 +1,7 @@
 import React from 'react'
 
 const Product = ({
-	product: { id, thumbnail, title, description, price },
+	product: { id, thumbnail, title, description, price, brand, stock },
 	handleDelete,
 }) => {
 	return (
@@ -10,6 +10,8 @@ const Product = ({
 			<div className='card-body'>
 				<h5 className='card-title'>{title}</h5>
 				<p className='card-text'>{description}</p>
+				<p className='card-text'>Brand: {brand}</p>
+				<p className='card-text'>Stock: {stock.toString()}</p>
 				<button className='btn btn-primary'>{price}</button>
 				<button
 					className='btn btn-danger ms-2'
