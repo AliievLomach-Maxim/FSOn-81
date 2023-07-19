@@ -1,4 +1,4 @@
-import { Component } from 'react'
+import { Component, PureComponent } from 'react'
 
 class CreateProductForm extends Component {
 	state = {
@@ -8,6 +8,11 @@ class CreateProductForm extends Component {
 		brand: 'Apple',
 		stock: true,
 		isValid: true,
+	}
+
+	shouldComponentUpdate(nextProps, nextState) {
+		if (nextProps.count.count !== this.props.count.count) return true
+		return false
 	}
 
 	handleChange = ({ target: { value, name, checked } }) => {
@@ -35,10 +40,11 @@ class CreateProductForm extends Component {
 	}
 
 	render() {
-		console.log('this.state :>> ', this.state)
+		console.log(this.props)
 		const { title, description, price, brand, stock, isValid } = this.state
 		return (
 			<form className='mb-3' onSubmit={this.handleSubmit}>
+				{this.props.count.count}
 				<div className='mb-3'>
 					<label htmlFor='exampleInputTitle' className='form-label'>
 						Title:

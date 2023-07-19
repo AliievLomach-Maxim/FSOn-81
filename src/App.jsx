@@ -11,8 +11,8 @@ class App extends Component {
 	toggleModal = () => {
 		this.setState((prev) => ({ isShowModal: !prev.isShowModal }))
 	}
+
 	render() {
-		console.log('this.state :>> ', this.state)
 		return (
 			<div className='container'>
 				<Header open={this.toggleModal} />
