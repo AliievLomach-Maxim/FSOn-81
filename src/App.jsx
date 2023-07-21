@@ -1,6 +1,5 @@
 import ProductsList from './components/ProductsList/ProductsList'
 import Header from './components/Header/Header'
-import Counter from './components/Counter/Counter'
 import Modal from './components/Modal/Modal'
 import { Component } from 'react'
 
@@ -16,7 +15,6 @@ class App extends Component {
 		return (
 			<div className='container'>
 				<Header open={this.toggleModal} />
-				{/* <Counter /> */}
 				<ProductsList />
 				{this.state.isShowModal && (
 					<Modal close={this.toggleModal}>MODAL</Modal>
