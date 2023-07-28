@@ -119,3 +119,19 @@
 
 -   edit class to huk <ContentInfo/>
 -   if return <ContentInfo/>
+
+### Less 2
+
+-   useMemo
+-   complexCompute
+-   useEffect vs useMemo
+
+-   useCallback
+
+-   async with useEffect
+-   Profiler
+
+-   useContext
+-   Provider
+-   toggleState
+-   useAlert

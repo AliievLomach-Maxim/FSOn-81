@@ -1,8 +1,9 @@
-// import ProductsList from './components/ProductsList/ProductsList'
+import ProductsList from './components/ProductsList/ProductsList'
 import Header from './components/Header/Header'
 import Modal from './components/Modal/Modal'
 
 import { useState } from 'react'
+// import TestUseMemo from './components/TestUseMemo/TestUseMemo'
 
 const App = () => {
 	const [isShowModal, setIsShowModal] = useState(false)
@@ -16,33 +17,12 @@ const App = () => {
 	return (
 		<div className='container'>
 			<Header open={toggleModal} />
-			{/* <ProductsList /> */}
+			<ProductsList />
 			{/* <Counter /> */}
+			{/* <TestUseMemo /> */}
 			{isShowModal && <Modal close={toggleModal}>MODAL</Modal>}
 		</div>
 	)
 }
 
 export default App
-
-// class App extends Component {
-// state = {
-// 	isShowModal: false,
-// }
-// 	toggleModal = () => {
-// this.setState((prev) => ({ isShowModal: !prev.isShowModal }))
-// 	}
-
-// 	render() {
-// 		return (
-// 			<div className='container'>
-// 				<Header open={this.toggleModal} />
-// 				<ProductsList />
-// 				{this.state.isShowModal && (
-// 					<Modal close={this.toggleModal}>MODAL</Modal>
-// 				)}
-// 			</div>
-// 		)
-// 	}
-// }
-// export default App
