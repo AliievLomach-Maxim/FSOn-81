@@ -1,112 +1,103 @@
 import Product from '../Product/Product'
-import { Component } from 'react'
+
 import { getAllProducts, getProductsBySearch } from '../../api/products'
 import SearchForm from '../Forms/SearchForm'
 
-const STATUS = {
-	PENDING: 'PENDING',
-	FULFILLED: 'FULFILLED',
-	REJECTED: 'REJECTED',
-	IDLE: 'IDLE',
-}
+import React, { useCallback, useEffect, useState } from 'react'
 
-class ProductsList extends Component {
-	static limit = 10
-	state = {
-		products: null,
-		error: '',
-		searchQuery: '',
-		page: 1,
-		status: STATUS.IDLE,
-	}
+const LIMIT = 10
 
-	componentDidMount() {
-		this.handleProducts()
-	}
+const ProductsList = () => {
+	const [products, setProducts] = useState(null)
+	const [error, setError] = useState('')
+	const [searchQuery, setSearchQuery] = useState('')
+	const [page, setPage] = useState(1)
+	const [isLoading, setIsLoading] = useState(false)
 
-	componentDidUpdate(_, prevState) {
-		if (prevState.searchQuery !== this.state.searchQuery)
-			this.handleSearchProducts()
-
-		if (prevState.page !== this.state.page) this.handleProducts()
-	}
-
-	handleSearchProducts = async () => {
-		try {
-			this.setState({ status: STATUS.PENDING })
-			const data = await getProductsBySearch(this.state.searchQuery)
-			this.setState({ products: data.products, status: STATUS.FULFILLED })
-		} catch (error) {
-			this.setState({ error: error.message, status: STATUS.REJECTED })
-			console.log(error)
+	useEffect(() => {
+		const handleProducts = async () => {
+			const skip = page * LIMIT - LIMIT
+			try {
+				setIsLoading(true)
+				const data = await getAllProducts(LIMIT, skip)
+				setProducts((prev) =>
+					prev ? [...prev, ...data.products] : data.products
+				)
+			} catch (error) {
+				setError(error.message)
+				console.log(error)
+			} finally {
+				setIsLoading(false)
+			}
 		}
-	}
+		handleProducts()
+	}, [page])
 
-	handleProducts = async () => {
-		const skip = this.state.page * ProductsList.limit - ProductsList.limit
+	const handleSearchProducts = useCallback(async () => {
 		try {
-			this.setState({ status: STATUS.PENDING })
-			const data = await getAllProducts(ProductsList.limit, skip)
-			this.setState((prev) => ({
-				products: prev.products
-					? [...prev.products, ...data.products]
-					: data.products,
-				status: STATUS.FULFILLED,
-			}))
+			setIsLoading(true)
+			const data = await getProductsBySearch(searchQuery)
+			setProducts(data.products)
 		} catch (error) {
-			this.setState({ error: error.message, status: STATUS.REJECTED })
+			setError(error.message)
 			console.log(error)
+		} finally {
+			setIsLoading(false)
 		}
+	}, [searchQuery])
+
+	useEffect(() => {
+		searchQuery && handleSearchProducts()
+	}, [handleSearchProducts, searchQuery])
+
+	const handleSearch = (searchQuery) => {
+		setSearchQuery(searchQuery)
 	}
 
-	handleSearch = (searchQuery) => {
-		this.setState({ searchQuery })
+	const handleClickLoadMore = () => {
+		setPage((prev) => prev + 1)
 	}
 
-	handleClickLoadMore = () => {
-		this.setState((prev) => ({ page: prev.page + 1 }))
-	}
-
-	render() {
-		const { error, products, isLoading, status } = this.state
-		const { PENDING, FULFILLED, REJECTED } = STATUS
-
-		if (status === PENDING) return <h2>Loading...</h2>
-
-		if (status === FULFILLED)
-			return (
+	return (
+		<>
+			<SearchForm handleSearch={handleSearch} />
+			{isLoading && <h2>Loading...</h2>}
+			{error && <h2>{error}</h2>}
+			{products && (
 				<>
 					{products.length === 0 && <h2>Products not found</h2>}
 					{products.map((product) => (
-						<Product
-							key={product.id}
-							product={product}
-							handleDelete={this.handleDelete}
-						/>
+						<Product key={product.id} product={product} />
 					))}
 					<button
 						className='btn btn-success'
-						onClick={this.handleClickLoadMore}
+						onClick={handleClickLoadMore}
 					>
 						Load more...
 					</button>
 				</>
-			)
-
-		if (status === REJECTED) return <h2>{error}</h2>
-	}
+			)}
+		</>
+	)
 }
 
 export default ProductsList
+
+// const STATUS = {
+// 	PENDING: 'PENDING',
+// 	FULFILLED: 'FULFILLED',
+// 	REJECTED: 'REJECTED',
+// 	IDLE: 'IDLE',
+// }
+
 // class ProductsList extends Component {
 // 	static limit = 10
 // 	state = {
 // 		products: null,
 // 		error: '',
-// 		// isLoading: false,
 // 		searchQuery: '',
 // 		page: 1,
-// status:STATUS.IDLE
+// 		status: STATUS.IDLE,
 // 	}
 
 // 	componentDidMount() {
@@ -122,11 +113,11 @@ export default ProductsList
 
 // 	handleSearchProducts = async () => {
 // 		try {
-// 			this.setState({ isLoading: true })
+// 			this.setState({ status: STATUS.PENDING })
 // 			const data = await getProductsBySearch(this.state.searchQuery)
-// 			this.setState({ products: data.products, isLoading: false })
+// 			this.setState({ products: data.products, status: STATUS.FULFILLED })
 // 		} catch (error) {
-// 			this.setState({ error: error.message, isLoading: false })
+// 			this.setState({ error: error.message, status: STATUS.REJECTED })
 // 			console.log(error)
 // 		}
 // 	}
@@ -134,16 +125,16 @@ export default ProductsList
 // 	handleProducts = async () => {
 // 		const skip = this.state.page * ProductsList.limit - ProductsList.limit
 // 		try {
-// 			this.setState({ isLoading: true })
+// 			this.setState({ status: STATUS.PENDING })
 // 			const data = await getAllProducts(ProductsList.limit, skip)
 // 			this.setState((prev) => ({
 // 				products: prev.products
 // 					? [...prev.products, ...data.products]
 // 					: data.products,
-// 				isLoading: false,
+// 				status: STATUS.FULFILLED,
 // 			}))
 // 		} catch (error) {
-// 			this.setState({ error: error.message, isLoading: false })
+// 			this.setState({ error: error.message, status: STATUS.REJECTED })
 // 			console.log(error)
 // 		}
 // 	}
@@ -157,112 +148,33 @@ export default ProductsList
 // 	}
 
 // 	render() {
-// 		const { error, products, isLoading } = this.state
-// return (
-// 	<>
-// 		<SearchForm handleSearch={this.handleSearch} />
-// 		{isLoading && <h2>Loading...</h2>}
-// 		{error && <h2>{error}</h2>}
-// 		{products?.length === 0 && <h2>Products not found</h2>}
-// 		{products?.map((product) => (
-// 			<Product
-// 				key={product.id}
-// 				product={product}
-// 				handleDelete={this.handleDelete}
-// 			/>
-// 		))}
-// 		{products && (
-// 			<button
-// 				className='btn btn-success'
-// 				onClick={this.handleClickLoadMore}
-// 			>
-// 				Load more...
-// 			</button>
-// 		)}
-// 	</>
-// 		)
-// 	}
-// }
+// 		const { error, products, isLoading, status } = this.state
+// 		const { PENDING, FULFILLED, REJECTED } = STATUS
 
-// export default ProductsList
+// 		if (status === PENDING) return <h2>Loading...</h2>
 
-// if(data?.info?.someInfo?.secondName){console.log(object);}
-
-// class ProductsList extends Component {
-// 	state = {
-// 		products: null,
-// 		count: { count: 0 },
-// 	}
-
-// 	componentDidMount() {
-// 		const localData = localStorage.getItem('products')
-// 		if (localData && JSON.parse(localData).length > 0)
-// 			this.setState({ products: JSON.parse(localData) })
-// 		else this.setState({ products: data })
-// 	}
-
-// 	componentDidUpdate(prevProps, prevState) {
-// 		if (prevState.products?.length !== this.state.products.length) {
-// 			localStorage.setItem(
-// 				'products',
-// 				JSON.stringify(this.state.products)
+// 		if (status === FULFILLED)
+// 			return (
+// 				<>
+// 					{products.length === 0 && <h2>Products not found</h2>}
+// 					{products.map((product) => (
+// 						<Product
+// 							key={product.id}
+// 							product={product}
+// 							handleDelete={this.handleDelete}
+// 						/>
+// 					))}
+// 					<button
+// 						className='btn btn-success'
+// 						onClick={this.handleClickLoadMore}
+// 					>
+// 						Load more...
+// 					</button>
+// 				</>
 // 			)
-// 		}
-// 	}
 
-// 	handleDelete = (id) => {
-// 		this.setState((prev) => ({
-// 			products: prev.products.filter((product) => product.id !== id),
-// 			count: { count: 0 },
-// 		}))
-// 	}
-
-// 	createProduct = (data) => {
-// 		if (this.isDuplicate(data.title))
-// 			return alert(`${data.title} already exist`)
-
-// 		const newProduct = {
-// 			...data,
-// 			thumbnail: 'https://i.dummyjson.com/data/products/1/thumbnail.jpg',
-// 			id: nanoid(),
-// 		}
-// 		this.setState((prev) => ({
-// 			products: [newProduct, ...prev.products],
-// 		}))
-// 	}
-
-// 	isDuplicate = (title) =>
-// 		this.state.products.find((product) => product.title === title)
-
-// 	render() {
-// 		return (
-// 			<>
-// 				<button
-// 					onClick={() =>
-// 						this.setState((prev) => ({
-// 							count: { count: prev.count.count + 1 },
-// 						}))
-// 					}
-// 				>
-// 					click
-// 				</button>
-// 				<CreateProductForm
-// 					createProduct={this.createProduct}
-// 					isDuplicate={this.isDuplicate}
-// 					count={this.state.count}
-// 				/>
-// 				{this.state.products?.map((product) => (
-// 					<Product
-// 						key={product.id}
-// 						product={product}
-// 						handleDelete={this.handleDelete}
-// 					/>
-// 				))}
-// 			</>
-// 		)
+// 		if (status === REJECTED) return <h2>{error}</h2>
 // 	}
 // }
 
 // export default ProductsList
-
-// // if(data?.info?.someInfo?.secondName){console.log(object);}
