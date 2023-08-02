@@ -1,27 +1,28 @@
-import ProductsList from './components/ProductsList/ProductsList'
-import Header from './components/Header/Header'
-import Modal from './components/Modal/Modal'
-
-import { useState } from 'react'
-// import TestUseMemo from './components/TestUseMemo/TestUseMemo'
+import { Route, Routes } from 'react-router-dom'
+import HomePage from './pages/HomePage'
+import ProductsPage from './pages/ProductsPage'
+// import Header from './components/Header/Header'
+import Layout from './layouts/Layout'
+import ProductDetailsPage from './pages/ProductDetailsPage'
 
 const App = () => {
-	const [isShowModal, setIsShowModal] = useState(false)
-
-	const toggleModal = () => {
-		setIsShowModal((prev) => {
-			return !prev
-		})
-	}
-
 	return (
-		<div className='container'>
-			<Header open={toggleModal} />
-			<ProductsList />
-			{/* <Counter /> */}
-			{/* <TestUseMemo /> */}
-			{isShowModal && <Modal close={toggleModal}>MODAL</Modal>}
-		</div>
+		// <>
+		// <Header />
+		<Routes>
+			<Route path='/' element={<Layout />}>
+				<Route index element={<HomePage />} />
+				<Route path='products' element={<ProductsPage />}>
+					<Route path=':id' element={<ProductDetailsPage />} />
+				</Route>
+			</Route>
+			{/* <Route path='/' element={<Layout />}>
+				<Route index element={<HomePage />} />
+				<Route path='products' element={<ProductsPage />} />
+				<Route path='products/:id' element={<ProductDetailsPage />} />
+			</Route> */}
+		</Routes>
+		// </>
 	)
 }
 
