@@ -3,16 +3,21 @@ import Product from '../Product/Product'
 import { getAllProducts, getProductsBySearch } from '../../api/products'
 import SearchForm from '../Forms/SearchForm'
 
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 
 const LIMIT = 10
 
 const ProductsList = () => {
 	const [products, setProducts] = useState(null)
 	const [error, setError] = useState('')
-	const [searchQuery, setSearchQuery] = useState('')
+	// const [searchQuery, setSearchQuery] = useState('')
 	const [page, setPage] = useState(1)
 	const [isLoading, setIsLoading] = useState(false)
+
+	const [params, setParams] = useSearchParams()
+
+	const searchQuery = useMemo(() => params.get('search'), [params])
 
 	useEffect(() => {
 		const handleProducts = async () => {
@@ -51,7 +56,8 @@ const ProductsList = () => {
 	}, [handleSearchProducts, searchQuery])
 
 	const handleSearch = (searchQuery) => {
-		setSearchQuery(searchQuery)
+		// setSearchQuery(searchQuery)
+		setParams({ search: searchQuery })
 	}
 
 	const handleClickLoadMore = () => {

@@ -1,10 +1,11 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 const Product = ({
 	product: { id, thumbnail, title, description, price, brand, stock },
 	handleDelete,
 }) => {
+	const location = useLocation()
 	return (
 		<div className='card' style={{ width: '18rem' }}>
 			<img src={thumbnail} className='card-img-top' alt='...' />
@@ -13,7 +14,13 @@ const Product = ({
 				<p className='card-text'>{description}</p>
 				<p className='card-text'>Brand: {brand}</p>
 				<p className='card-text'>Stock: {stock.toString()}</p>
-				<Link to={id.toString()}>Details</Link>
+				<Link
+					to={id.toString()}
+					state={location}
+					// state={{ location, name: 'qwrety', age: 32 }}
+				>
+					Details
+				</Link>
 				<button className='btn btn-primary'>{price}</button>
 				<button
 					className='btn btn-danger ms-2'
