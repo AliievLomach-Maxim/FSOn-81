@@ -1,28 +1,52 @@
 import { Route, Routes } from 'react-router-dom'
 import HomePage from './pages/HomePage'
+import { Suspense, lazy } from 'react'
 import ProductsPage from './pages/ProductsPage'
-// import Header from './components/Header/Header'
 import Layout from './layouts/Layout'
-import ProductDetailsPage from './pages/ProductDetailsPage'
+// import ProductDetailsPage from './pages/ProductDetailsPage'
+// import LoginPage from './pages/LoginPage'
+import PrivateRoute from './guards/PrivateRoute'
+
+const LoginPage = lazy(() => import('./pages/LoginPage'))
+const ProductDetailsPage = lazy(() => import('./pages/ProductDetailsPage'))
 
 const App = () => {
 	return (
-		// <>
-		// <Header />
 		<Routes>
 			<Route path='/' element={<Layout />}>
 				<Route index element={<HomePage />} />
-				<Route path='products' element={<ProductsPage />}>
-					<Route path=':id' element={<ProductDetailsPage />} />
-				</Route>
+				<Route
+					path='products'
+					element={
+						<PrivateRoute>
+							<ProductsPage />
+						</PrivateRoute>
+					}
+				/>
+				<Route
+					path='products/:id'
+					element={
+						<Suspense
+							fallback={
+								<h1>
+									!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Loading....
+								</h1>
+							}
+						>
+							<ProductDetailsPage />
+						</Suspense>
+					}
+				/>
 			</Route>
-			{/* <Route path='/' element={<Layout />}>
-				<Route index element={<HomePage />} />
-				<Route path='products' element={<ProductsPage />} />
-				<Route path='products/:id' element={<ProductDetailsPage />} />
-			</Route> */}
+			<Route
+				path='/login'
+				element={
+					<Suspense>
+						<LoginPage />
+					</Suspense>
+				}
+			/>
 		</Routes>
-		// </>
 	)
 }
 
