@@ -1,6 +1,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { increment } from '../store/number/actions'
+import { incrementAction } from '../store/numberSlice/slice'
+// import { incrementAction } from '../store/number/actions'
 
 const HomePage = () => {
 	const { number } = useSelector((state) => state.number)
@@ -8,11 +9,11 @@ const HomePage = () => {
 	const dispatch = useDispatch()
 
 	const handleClick = () => {
-		dispatch(increment(1))
+		dispatch(incrementAction(1))
 	}
 	const handleClick2 = () => {
 		console.log('click')
-		dispatch(increment(10))
+		dispatch(incrementAction(10))
 	}
 
 	console.log('number :>> ', number)
