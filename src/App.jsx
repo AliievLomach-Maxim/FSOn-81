@@ -9,44 +9,38 @@ import PrivateRoute from './guards/PrivateRoute'
 
 const LoginPage = lazy(() => import('./pages/LoginPage'))
 const ProductDetailsPage = lazy(() => import('./pages/ProductDetailsPage'))
+const ToDoPage = lazy(() => import('./pages/ToDoPage'))
 
 const App = () => {
 	return (
-		<Routes>
-			<Route path='/' element={<Layout />}>
-				<Route index element={<HomePage />} />
+		<Suspense fallback={<h1>Loading....</h1>}>
+			<Routes>
+				<Route path='/' element={<Layout />}>
+					<Route index element={<HomePage />} />
+					<Route
+						path='products'
+						element={
+							<PrivateRoute>
+								<ProductsPage />
+							</PrivateRoute>
+						}
+					/>
+					<Route
+						path='products/:id'
+						element={<ProductDetailsPage />}
+					/>
+					<Route path='todo' element={<ToDoPage />} />
+				</Route>
 				<Route
-					path='products'
+					path='/login'
 					element={
-						<PrivateRoute>
-							<ProductsPage />
-						</PrivateRoute>
-					}
-				/>
-				<Route
-					path='products/:id'
-					element={
-						<Suspense
-							fallback={
-								<h1>
-									!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Loading....
-								</h1>
-							}
-						>
-							<ProductDetailsPage />
+						<Suspense>
+							<LoginPage />
 						</Suspense>
 					}
 				/>
-			</Route>
-			<Route
-				path='/login'
-				element={
-					<Suspense>
-						<LoginPage />
-					</Suspense>
-				}
-			/>
-		</Routes>
+			</Routes>
+		</Suspense>
 	)
 }
 

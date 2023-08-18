@@ -18,6 +18,9 @@ const Header = ({ open }) => {
 						<NavLink className='nav-link text-white' to='/products'>
 							Products
 						</NavLink>
+						<NavLink className='nav-link text-white' to='/todo'>
+							Todo
+						</NavLink>
 					</div>
 				</div>
 				<button onClick={open} className='btn btn-outline-success'>
