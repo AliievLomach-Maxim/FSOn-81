@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
 import Todo from '../components/Todo/Todo'
-import { createTodo, deleteTodo, updateTodo } from '../store/todo/slice'
 import { useEffect } from 'react'
 import { getAllTodoThunk } from '../store/todo/thunks'
 
@@ -12,15 +11,6 @@ const ToDoPage = () => {
 		dispatch(getAllTodoThunk())
 	}, [dispatch])
 
-	// const handleDelete = (id) => {
-	// 	dispatch(deleteTodo(id))
-	// }
-	// const handleCreate = () => {
-	// 	dispatch(createTodo())
-	// }
-	// const handleUpdate = (id) => {
-	// 	dispatch(updateTodo(id))
-	// }
 	return (
 		<>
 			{isLoading && <h1>Loading...</h1>}

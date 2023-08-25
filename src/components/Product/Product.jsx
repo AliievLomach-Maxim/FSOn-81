@@ -1,4 +1,3 @@
-import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
 
 const Product = ({
@@ -14,11 +13,7 @@ const Product = ({
 				<p className='card-text'>{description}</p>
 				<p className='card-text'>Brand: {brand}</p>
 				<p className='card-text'>Price: $ {price.toString()}</p>
-				<Link
-					to={id.toString()}
-					state={location}
-					// state={{ location, name: 'qwrety', age: 32 }}
-				>
+				<Link to={id.toString()} state={location}>
 					Details
 				</Link>
 				<button className='btn btn-primary'>{price}</button>

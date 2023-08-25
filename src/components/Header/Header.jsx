@@ -1,9 +1,5 @@
 import { NavLink } from 'react-router-dom'
 import './styled.css'
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 const Header = ({ open }) => {
 	return (
 		<nav className='navbar bg-dark mb-3 navbar-expand-md'>

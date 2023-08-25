@@ -15,17 +15,3 @@ export const selectProducts = createSelector(
 		})
 	}
 )
-
-// export const sortedProductsSelector = (state) =>
-// 	state.products.products &&
-// 	state.products.products
-// 		.filter((el) => {
-// 			console.log('filter')
-// 			return el.title
-// 				.toLowerCase()
-// 				.includes(state.products.filter.toLowerCase())
-// 		})
-// 		.toSorted((a, b) => {
-// 			console.log('sorted')
-// 			return a.price - b.price
-// 		})
