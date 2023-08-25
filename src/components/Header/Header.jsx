@@ -1,4 +1,4 @@
-import { Link, NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import './styled.css'
 import { useDispatch } from 'react-redux'
 import { getProductsThunk } from '../../store/products/slice'

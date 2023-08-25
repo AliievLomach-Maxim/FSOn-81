@@ -1,18 +1,20 @@
 import axios from 'axios'
 
-axios.defaults.baseURL = 'https://dummyjson.com/products'
+const instance = axios.create({
+	baseURL: 'https://dummyjson.com/products',
+})
 
 export const getAllProducts = async (limit, skip) => {
-	const { data } = await axios(`?limit=${limit}&skip=${skip}`)
+	const { data } = await instance(`?limit=${limit}&skip=${skip}`)
 	return data
 }
 
 export const getSingleProduct = async (id) => {
-	const { data } = await axios(`/${id}`)
+	const { data } = await instance(`/${id}`)
 	return data
 }
 
 export const getProductsBySearch = async (query) => {
-	const { data } = await axios(`/search?q=${query}`)
+	const { data } = await instance(`/search?q=${query}`)
 	return data
 }

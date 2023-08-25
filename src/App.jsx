@@ -3,8 +3,6 @@ import HomePage from './pages/HomePage'
 import { Suspense, lazy } from 'react'
 import ProductsPage from './pages/ProductsPage'
 import Layout from './layouts/Layout'
-// import ProductDetailsPage from './pages/ProductDetailsPage'
-// import LoginPage from './pages/LoginPage'
 import PrivateRoute from './guards/PrivateRoute'
 
 const LoginPage = lazy(() => import('./pages/LoginPage'))

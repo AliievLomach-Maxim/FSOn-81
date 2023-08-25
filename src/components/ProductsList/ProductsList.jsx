@@ -1,34 +1,42 @@
-import { useDispatch, useSelector } from 'react-redux'
 import Product from '../Product/Product'
-import { getProductsThunk } from '../../store/products/slice'
-import { useEffect } from 'react'
+import { getProductsThunk } from '../../store/products/thunks'
+import { useEffect, useState } from 'react'
+import {
+	productsSelector,
+	selectProducts,
+} from '../../store/products/selectors'
+import SearchForm from './SearchForm'
+import { setFilter } from '../../store/products/slice'
+import { useDispatch, useSelector } from 'react-redux'
 
 const ProductsList = () => {
+	const [number, setNumber] = useState(0)
 	const dispatch = useDispatch()
-	const { products, isLoading, error } = useSelector(
-		(state) => state.products
-	)
+	const { isLoading, error } = useSelector(productsSelector)
+	const sortedProducts = useSelector(selectProducts)
 
 	useEffect(() => {
-		!products && dispatch(getProductsThunk())
-	}, [dispatch, products])
+		!sortedProducts && dispatch(getProductsThunk())
+	}, [dispatch, sortedProducts])
+
+	const handleSubmit = ({ search }) => {
+		dispatch(setFilter(search))
+	}
 
 	return (
 		<>
+			<SearchForm handleSubmit={handleSubmit} />
+			<button onClick={() => setNumber((prev) => prev + 1)}>
+				{number}
+			</button>
 			{isLoading && <h2>Loading...</h2>}
 			{error && <h2>{error}</h2>}
-			{products && (
+			{sortedProducts && (
 				<>
-					{products.length === 0 && <h2>Products not found</h2>}
-					{products.map((product) => (
+					{sortedProducts.length === 0 && <h2>Products not found</h2>}
+					{sortedProducts.map((product) => (
 						<Product key={product.id} product={product} />
 					))}
-					{/* <button
-						className='btn btn-success'
-						onClick={handleClickLoadMore}
-					>
-						Load more...
-					</button> */}
 				</>
 			)}
 		</>
@@ -36,93 +44,3 @@ const ProductsList = () => {
 }
 
 export default ProductsList
-// import Product from '../Product/Product'
-
-// import { getAllProducts, getProductsBySearch } from '../../api/products'
-// import SearchForm from '../Forms/SearchForm'
-
-// import React, { useCallback, useEffect, useMemo, useState } from 'react'
-// import { useSearchParams } from 'react-router-dom'
-
-// const LIMIT = 10
-
-// const ProductsList = () => {
-// 	const [products, setProducts] = useState(null)
-// 	const [error, setError] = useState('')
-// 	// const [searchQuery, setSearchQuery] = useState('')
-// 	const [page, setPage] = useState(1)
-// 	const [isLoading, setIsLoading] = useState(false)
-
-// 	const [params, setParams] = useSearchParams()
-
-// 	const searchQuery = useMemo(() => params.get('search'), [params])
-
-// 	useEffect(() => {
-// 		const handleProducts = async () => {
-// 			const skip = page * LIMIT - LIMIT
-// 			try {
-// 				setIsLoading(true)
-// 				const data = await getAllProducts(LIMIT, skip)
-// 				setProducts((prev) =>
-// 					prev ? [...prev, ...data.products] : data.products
-// 				)
-// 			} catch (error) {
-// 				setError(error.message)
-// 				console.log(error)
-// 			} finally {
-// 				setIsLoading(false)
-// 			}
-// 		}
-// 		handleProducts()
-// 	}, [page])
-
-// 	const handleSearchProducts = useCallback(async () => {
-// 		try {
-// 			setIsLoading(true)
-// 			const data = await getProductsBySearch(searchQuery)
-// 			setProducts(data.products)
-// 		} catch (error) {
-// 			setError(error.message)
-// 			console.log(error)
-// 		} finally {
-// 			setIsLoading(false)
-// 		}
-// 	}, [searchQuery])
-
-// 	useEffect(() => {
-// 		searchQuery && handleSearchProducts()
-// 	}, [handleSearchProducts, searchQuery])
-
-// 	const handleSearch = (searchQuery) => {
-// 		// setSearchQuery(searchQuery)
-// 		setParams({ search: searchQuery })
-// 	}
-
-// 	const handleClickLoadMore = () => {
-// 		setPage((prev) => prev + 1)
-// 	}
-
-// 	return (
-// 		<>
-// 			<SearchForm handleSearch={handleSearch} />
-// 			{isLoading && <h2>Loading...</h2>}
-// 			{error && <h2>{error}</h2>}
-// 			{products && (
-// 				<>
-// 					{products.length === 0 && <h2>Products not found</h2>}
-// 					{products.map((product) => (
-// 						<Product key={product.id} product={product} />
-// 					))}
-// 					<button
-// 						className='btn btn-success'
-// 						onClick={handleClickLoadMore}
-// 					>
-// 						Load more...
-// 					</button>
-// 				</>
-// 			)}
-// 		</>
-// 	)
-// }
-
-// export default ProductsList
