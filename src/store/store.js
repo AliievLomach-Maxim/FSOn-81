@@ -12,6 +12,19 @@ import { persistStore } from 'redux-persist'
 // }
 // const persistedReducer = persistReducer(persistConfig, reducer)
 
+// const customMid = (store) => {
+// 	return (next) => {
+// 		return (action) => {
+// 			if (typeof action === 'function') {
+// 				console.log(store)
+// 				action(store.dispatch)
+// 				return
+// 			}
+// 			return next(action)
+// 		}
+// 	}
+// }
+
 export const store = configureStore({ reducer })
 // export const store = configureStore({ reducer: persistedReducer })
 

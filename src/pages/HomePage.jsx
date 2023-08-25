@@ -16,7 +16,7 @@ const HomePage = () => {
 		dispatch(incrementAction(10))
 	}
 
-	console.log('number :>> ', number)
+	// console.log('number :>> ', number)
 	return (
 		<>
 			{number}
