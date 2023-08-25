@@ -13,7 +13,7 @@ const Product = ({
 				<h5 className='card-title'>{title}</h5>
 				<p className='card-text'>{description}</p>
 				<p className='card-text'>Brand: {brand}</p>
-				<p className='card-text'>Stock: {stock.toString()}</p>
+				<p className='card-text'>Price: $ {price.toString()}</p>
 				<Link
 					to={id.toString()}
 					state={location}

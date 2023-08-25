@@ -1,4 +1,5 @@
 import Product from '../Product/Product'
+<<<<<<< Updated upstream
 
 import { getAllProducts, getProductsBySearch } from '../../api/products'
 import SearchForm from '../Forms/SearchForm'
@@ -67,12 +68,50 @@ const ProductsList = () => {
 	return (
 		<>
 			<SearchForm handleSearch={handleSearch} />
+=======
+import { getProductsThunk } from '../../store/products/thunks'
+import { useEffect, useMemo, useState } from 'react'
+import {
+	productsSelector,
+	selectProducts,
+	sortedProductsSelector,
+} from '../../store/products/selectors'
+import SearchForm from './SearchForm'
+import { setFilter } from '../../store/products/slice'
+
+const ProductsList = () => {
+	const [number, setNumber] = useState(0)
+	const dispatch = useDispatch()
+	const { isLoading, error } = useSelector(productsSelector)
+	const sortedProducts = useSelector(selectProducts)
+	// const sortedProducts = useSelector(sortedProductsSelector)
+
+	useEffect(() => {
+		!sortedProducts && dispatch(getProductsThunk())
+	}, [dispatch, sortedProducts])
+
+	const handleSubmit = ({ search }) => {
+		dispatch(setFilter(search))
+	}
+
+	// const filteredProducts = sortedProducts.filter((el) => {
+	// 	console.log('filter')
+	// 	return el.title.toLowerCase().includes(filter.toLowerCase())
+	// })
+
+	return (
+		<>
+			<SearchForm handleSubmit={handleSubmit} />
+			<button onClick={() => setNumber((prev) => prev + 1)}>
+				{number}
+			</button>
+>>>>>>> Stashed changes
 			{isLoading && <h2>Loading...</h2>}
 			{error && <h2>{error}</h2>}
-			{products && (
+			{sortedProducts && (
 				<>
-					{products.length === 0 && <h2>Products not found</h2>}
-					{products.map((product) => (
+					{sortedProducts.length === 0 && <h2>Products not found</h2>}
+					{sortedProducts.map((product) => (
 						<Product key={product.id} product={product} />
 					))}
 					<button
@@ -88,6 +127,7 @@ const ProductsList = () => {
 }
 
 export default ProductsList
+<<<<<<< Updated upstream
 
 // const STATUS = {
 // 	PENDING: 'PENDING',
@@ -184,3 +224,5 @@ export default ProductsList
 // }
 
 // export default ProductsList
+=======
+>>>>>>> Stashed changes
