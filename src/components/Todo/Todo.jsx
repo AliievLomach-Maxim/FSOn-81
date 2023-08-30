@@ -23,7 +23,7 @@ const Todo = ({ todo, createTodo, deleteTodo, updateTodo }) => {
 					<button
 						onClick={() => deleteTodo(todo.id)}
 						type='button'
-						class='btn-close ms-4'
+						className='btn-close ms-4'
 						aria-label='Close'
 					></button>
 				</div>

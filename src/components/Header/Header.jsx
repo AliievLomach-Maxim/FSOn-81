@@ -1,9 +1,22 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import './styled.css'
-import { useDispatch } from 'react-redux'
-import { getProductsThunk } from '../../store/products/slice'
-const Header = ({ open }) => {
+import { useDispatch, useSelector } from 'react-redux'
+import { tokenSelector } from '../../store/auth/selectors'
+import { logOut } from '../../store/auth/slice'
+import { deleteToken } from '../../api/auth'
+
+const Header = () => {
+	const navigate = useNavigate()
+	const isAuth = useSelector(tokenSelector)
 	const dispatch = useDispatch()
+
+	const handleClick = () => {
+		if (isAuth) {
+			dispatch(logOut())
+			return deleteToken()
+		}
+		navigate('/login')
+	}
 	return (
 		<nav className='navbar bg-dark mb-3 navbar-expand-md'>
 			<div className='container-fluid'>
@@ -26,14 +39,11 @@ const Header = ({ open }) => {
 						</NavLink>
 					</div>
 				</div>
-				<button onClick={open} className='btn btn-outline-success'>
-					Open Modal
-				</button>
 				<button
-					onClick={() => dispatch(getProductsThunk())}
+					onClick={handleClick}
 					className='btn btn-outline-success'
 				>
-					Thunk
+					{isAuth ? 'Log out' : 'Sign In'}
 				</button>
 			</div>
 		</nav>

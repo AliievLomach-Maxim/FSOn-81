@@ -16,7 +16,7 @@ const ToDoPage = () => {
 			{isLoading && <h1>Loading...</h1>}
 			{error && <h1>{error}</h1>}
 			{todo && (
-				<ul class='list-group mx-5'>
+				<ul className='list-group mx-5'>
 					{todo.map((todoItem) => (
 						<Todo
 							key={todoItem.id}
